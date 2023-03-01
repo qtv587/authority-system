@@ -25,5 +25,15 @@
     <sql id="Base_Column_List">
         id, label, parent_id, parent_name, code, path, name, url, type, icon, create_time, update_time, remark, order_num, is_delete
     </sql>
+    <select id="findPermissionListByUserId" resultType="com.manong.entity.Permission">
+        SELECT DISTINCT t5.id,t5.parent_id,t5.label,t5.code,t5.url,t5.type,t5.icon,t5.remark,t5.path,t5.name
+        FROM sys_user t1
+        LEFT JOIN sys_user_role t2 ON t1.id = t2.user_id
+        LEFT JOIN sys_role t3 ON t2.role_id = t3.id
+        LEFT JOIN sys_role_permission t4 ON t3.id = t4.role_Id
+        LEFT JOIN sys_permission t5 ON t4.permission_Id = t5.id
+        WHERE t1.id = #{userId}
+        ORDER BY t5.id
+    </select>
 
 </mapper>

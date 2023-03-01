@@ -3,11 +3,11 @@ public class ResultCode {
     /**
      * 成功状态码
      */
-    public static Integer SUCCESS = 200;
+    public static final Integer SUCCESS = 200;
     /**
      * 失败状态码
      */
-    public static Integer ERROR = 500;
+    public static final Integer ERROR = 500;
     /**
      * 未登录状态码
      */

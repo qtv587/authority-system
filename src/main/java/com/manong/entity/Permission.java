@@ -1,12 +1,16 @@
 package com.manong.entity;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -92,5 +96,24 @@ public class Permission implements Serializable {
      */
     private Integer isDelete;
 
+
+    /**
+     * 子菜单列表
+     */
+    @TableField(exist = false)  //因为表中不存在此字段，所以进行排除
+    @JsonInclude(JsonInclude.Include.NON_NULL)  //属性值为NULL的不进行序列化操作
+    private List<Permission> children = new ArrayList<Permission>();
+
+    /**
+     * 用于在前端判断是目录、菜单还是按钮
+     */
+    @TableField(exist = false)
+    private String value;
+
+    /**
+     * 是否展开
+     */
+    @TableField(exist = false)
+    private boolean open;
 
 }
