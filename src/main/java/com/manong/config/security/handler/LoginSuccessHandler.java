@@ -2,6 +2,7 @@ package com.manong.config.security.handler;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.manong.config.redis.RedisService;
 import com.manong.entity.User;
 import com.manong.utils.JwtUtils;
 import com.manong.utils.LoginResult;
@@ -30,6 +31,8 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
 
     @Resource
     private JwtUtils jwtUtils;
+    @Resource
+    private RedisService redisService;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -55,6 +58,10 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         outputStream.write(result.getBytes(StandardCharsets.UTF_8));
         outputStream.flush();
         outputStream.close();
+
+        String tokenKey = "token_"+token;
+        System.out.printf(token);
+        redisService.set(tokenKey,token,jwtUtils.getExpiration()/1000);
 
     }
 }

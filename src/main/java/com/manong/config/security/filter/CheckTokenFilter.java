@@ -33,7 +33,7 @@ import java.io.IOException;
 @Data
 public class CheckTokenFilter extends OncePerRequestFilter {
 
-    @Value("$(request.login.url)")
+    @Value("${request.login.url}")
     private String loginUrl;
     @Resource
     private RedisService redisService;
@@ -49,8 +49,10 @@ public class CheckTokenFilter extends OncePerRequestFilter {
         try {
             //获取访问的url
             String url = request.getRequestURI();
+            System.out.printf(url);
+            System.out.printf(loginUrl);
             //判断是否是登录请求，如果不是则进行token验证
-            if (url != loginUrl){
+            if (!url.equals(loginUrl)){
                 //进行token验证
                 this.validateToken(request);
             }
