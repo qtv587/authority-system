@@ -82,7 +82,14 @@ public class Result<T> {
      */
     public static<T> Result<T> exist(){
         Result<T> result = new Result<T>();
-        result.setSuccess(true);
+        /**
+         * 返回了 false
+         * 存在返回false,false不能删除
+         * 不存在返回true,true能删除
+         *
+         */
+
+        result.setSuccess(false);
         result.setCode(ResultCode.SUCCESS);
         result.setMessage("执行成功");
         return result;

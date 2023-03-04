@@ -33,7 +33,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             "/webjars/springfox-swagger-ui/**",
             "/v2/api-docs/**",
             "/swagger-resources/**",
-            "/swagger-ui.html"
+            "/swagger-ui.html",
+            "/api/user/swagger"
     };
     @Resource
     private LoginFailureHandler loginFailureHandler;
