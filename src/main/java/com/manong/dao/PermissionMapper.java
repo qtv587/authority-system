@@ -2,6 +2,7 @@ package com.manong.dao;
 
 import com.manong.entity.Permission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.manong.entity.PermissionQueryVo;
 
 import java.util.List;
 
