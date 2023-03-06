@@ -5,13 +5,16 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.manong.dao.PermissionMapper;
 import com.manong.entity.Permission;
 import com.manong.entity.PermissionQueryVo;
+import com.manong.entity.User;
 import com.manong.service.PermissionService;
 import com.manong.utils.MenuTree;
+import com.manong.utils.SecurityUtils;
+import com.manong.vo.RolePermissionVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * <p>
@@ -33,6 +36,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     /**
      * 查询菜单列表
+     *
      * @param permissionQueryVo
      * @return
      */
@@ -47,6 +51,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
 
     /**
      * 查询上级菜单列表
+     *
      * @return*
      */
 
@@ -54,7 +59,7 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     public List<Permission> findParentPermissionList() {
         QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
         queryWrapper.orderByAsc("order_num");
-        queryWrapper.in("type", Arrays.asList(0,1));
+        queryWrapper.in("type", Arrays.asList(0, 1));
         List<Permission> permissionList = baseMapper.selectList(queryWrapper);
         Permission permission = new Permission();
         permission.setId(0L);
@@ -70,11 +75,48 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     @Override
     public boolean hasChildrenOfPermission(Long id) {
         QueryWrapper<Permission> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("parent_id",id);
-        if (baseMapper.selectCount(queryWrapper)>0){
+        queryWrapper.eq("parent_id", id);
+        if (baseMapper.selectCount(queryWrapper) > 0) {
             return true;
         }
         return false;
+    }
+
+    /**
+     * 查询分配权限树列表
+     *
+     *
+     * @param roleId
+     * @return
+     */
+    @Override
+    public RolePermissionVo findPermissionTree(Long roleId) {
+        User user = SecurityUtils.getCurrentUser();
+        List<Permission> list = null;
+        if (user != null && !ObjectUtils.isEmpty(user.getIsAdmin()) && user.getIsAdmin() == 1) {
+            list = baseMapper.selectList(null);
+        } else {
+            list = baseMapper.findPermissionListByUserId(roleId);
+        }
+        List<Permission> permissionList = MenuTree.makeMenuTree(list, 0L);
+        ArrayList<Long> listIds = new ArrayList<>();
+        Optional.ofNullable(list).orElse(new ArrayList<>())
+                .stream()
+                .filter(Objects::nonNull)
+                .forEach(item -> {
+                    Optional.ofNullable(permissionList).orElse(new ArrayList<>())
+                            .stream()
+                            .filter(Objects::nonNull)
+                            .forEach(obj -> {
+                                if (item.getId() == obj.getId()) {
+                                    listIds.add(obj.getId());
+                                    return;
+                                }
+                            });
+                });
+        RolePermissionVo vo = new RolePermissionVo(permissionList, listIds.toArray());
+
+        return vo;
     }
 
 

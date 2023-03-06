@@ -1,8 +1,7 @@
 package com.manong.dao;
 
-import com.manong.entity.Permission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.manong.entity.PermissionQueryVo;
+import com.manong.entity.Permission;
 
 import java.util.List;
 
@@ -16,4 +15,6 @@ import java.util.List;
  */
 public interface PermissionMapper extends BaseMapper<Permission> {
     List<Permission> findPermissionListByUserId(Long userId);
+
+    List<Permission> findPermissionListByRoleId(Long roleId);
 }

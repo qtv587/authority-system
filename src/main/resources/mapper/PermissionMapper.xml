@@ -35,5 +35,9 @@
         WHERE t1.id = #{userId}
         ORDER BY t5.id
     </select>
+    <select id="findPermissionListByRoleId" resultType="com.manong.entity.Permission">
+        select * from sys_permission t1 inner join sys_role_permission t2 on t1.id = t2.permission_Id
+        where t2.role_Id= #{roleId}
+    </select>
 
 </mapper>
