@@ -8,7 +8,7 @@ import com.manong.entity.Role;
 import com.manong.entity.User;
 import com.manong.service.RoleService;
 import com.manong.utils.SecurityUtils;
-import com.manong.vo.RoleVo;
+import com.manong.vo.query.RoleQueryVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
@@ -22,9 +22,9 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
 
 
     @Override
-    public IPage<Role> findRoleListByUserId(IPage<Role> page, RoleVo roleVo) {
+    public IPage<Role> findRoleListByUserId(IPage<Role> page, RoleQueryVo roleQueryVo) {
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(!ObjectUtils.isEmpty(roleVo.getRoleName()), "role_name", roleVo.getRoleName());
+        queryWrapper.like(!ObjectUtils.isEmpty(roleQueryVo.getRoleName()), "role_name", roleQueryVo.getRoleName());
         queryWrapper.orderByAsc("id");
         User user = SecurityUtils.getCurrentUser();
         if (user != null && !ObjectUtils.isEmpty(user.getIsAdmin()) && user.getIsAdmin() != 1) {
@@ -58,5 +58,15 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
         baseMapper.deleteRolePermission(roleId);
 //保存角色权限
         return baseMapper.saveRolePermission(roleId, permissionIds) > 0;
+    }
+    /**
+     * 根据用户ID查询该用户拥有的角色ID
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public List<Long> findRoleIdByUserId(Long userId) {
+        return baseMapper.findRoleIdByUserId(userId);
     }
 }

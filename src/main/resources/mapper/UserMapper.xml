@@ -29,5 +29,11 @@
     <sql id="Base_Column_List">
         id, username, password, is_account_non_expired, is_account_non_locked, is_credentials_non_expired, is_enabled, real_name, nick_name, department_id, department_name, gender, phone, email, avatar, is_admin, create_time, update_time, is_delete
     </sql>
+    <update id="saveUserRole">
+        insert into sys_user_role(user_id,role_id) values
+        <foreach collection="roleIds" item="item" index="index" separator=",">
+            (#{userId},#{item})
+        </foreach>
+    </update>
 
 </mapper>

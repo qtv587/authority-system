@@ -10,7 +10,7 @@ import com.manong.service.RoleService;
 import com.manong.utils.Result;
 import com.manong.utils.SecurityUtils;
 import com.manong.vo.RolePermissionVo;
-import com.manong.vo.RoleVo;
+import com.manong.vo.query.RoleQueryVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -33,9 +33,9 @@ public class RoleController {
     private PermissionService permissionService;
 
     @GetMapping("/list")
-    public Result list(RoleVo roleVo) {
-        IPage<Role> page = new Page<Role>(roleVo.getPageNo(), roleVo.getPageSize());
-        roleService.findRoleListByUserId(page, roleVo);
+    public Result list(RoleQueryVo roleQueryVo) {
+        IPage<Role> page = new Page<Role>(roleQueryVo.getPageNo(), roleQueryVo.getPageSize());
+        roleService.findRoleListByUserId(page, roleQueryVo);
         return Result.ok(page);
     }
 

@@ -1,4 +1,4 @@
-package com.manong.vo;
+package com.manong.vo.query;
 
 import com.manong.entity.Role;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.Data;
  * @Description:
  */
 @Data
-public class RoleVo extends Role {
+public class RoleQueryVo extends Role {
     private Long pageNo = 1L;
     private Long pageSize = 10L;
     private Long userId;
