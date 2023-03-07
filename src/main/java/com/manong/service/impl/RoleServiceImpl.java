@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
 
+import java.util.List;
+
 
 @Service
 @Transactional
@@ -22,23 +24,39 @@ public class RoleServiceImpl extends ServiceImpl<RoleMapper, Role> implements Ro
     @Override
     public IPage<Role> findRoleListByUserId(IPage<Role> page, RoleVo roleVo) {
         QueryWrapper<Role> queryWrapper = new QueryWrapper<>();
-        queryWrapper.like(!ObjectUtils.isEmpty(roleVo.getRoleName()),"role_name",roleVo.getRoleName());
+        queryWrapper.like(!ObjectUtils.isEmpty(roleVo.getRoleName()), "role_name", roleVo.getRoleName());
         queryWrapper.orderByAsc("id");
         User user = SecurityUtils.getCurrentUser();
-        if (user!=null&&!ObjectUtils.isEmpty(user.getIsAdmin())&&user.getIsAdmin()!=1){
-            queryWrapper.eq("create_user",user.getId());
+        if (user != null && !ObjectUtils.isEmpty(user.getIsAdmin()) && user.getIsAdmin() != 1) {
+            queryWrapper.eq("create_user", user.getId());
         }
-        return baseMapper.selectPage(page,queryWrapper);
+        return baseMapper.selectPage(page, queryWrapper);
     }
 
     @Override
     public boolean hasRoleCount(Long id) {
-        return baseMapper.getRoleCountByRoleId(id)>0;
+        return baseMapper.getRoleCountByRoleId(id) > 0;
     }
 
     @Override
     public boolean deleteRoleById(Long id) {
         baseMapper.deleteRolePermissionByRoleId(id);
-        return baseMapper.deleteById(id)>0;
+        return baseMapper.deleteById(id) > 0;
+    }
+
+    /**
+     * 保存角色权限关系
+     *
+     * @param roleId
+     * @param permissionIds
+     * @return
+     */
+    @Override
+    @Transactional(rollbackFor = RuntimeException.class )
+    public boolean saveRolePermission(Long roleId, List<Long> permissionIds) {
+//删除该角色对应的权限信息
+        baseMapper.deleteRolePermission(roleId);
+//保存角色权限
+        return baseMapper.saveRolePermission(roleId, permissionIds) > 0;
     }
 }

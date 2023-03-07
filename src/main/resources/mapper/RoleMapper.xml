@@ -18,5 +18,12 @@
     <sql id="Base_Column_List">
         id, role_code, role_name, create_user, create_time, update_time, remark, is_delete
     </sql>
+    <insert id="saveRolePermission">
+        insert into sys_role_permission(role_id,permission_id) values
+        <foreach collection="permissionIds" item="item" index="index" separator=",">
+            (#{roleId},#{item})
+        </foreach>
+    </insert>
+
 
 </mapper>

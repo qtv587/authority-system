@@ -3,15 +3,18 @@ package com.manong.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.manong.dto.RolePermissionDTO;
 import com.manong.entity.Role;
 import com.manong.service.PermissionService;
 import com.manong.service.RoleService;
 import com.manong.utils.Result;
+import com.manong.utils.SecurityUtils;
 import com.manong.vo.RolePermissionVo;
 import com.manong.vo.RoleVo;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import java.util.Date;
 
 /**
  * <p>
@@ -38,6 +41,9 @@ public class RoleController {
 
     @PostMapping("/add")
     public Result add(@RequestBody Role role) {
+        role.setCreateUser(SecurityUtils.getCurrentUser().getId());
+        role.setCreateTime(new Date());
+        role.setUpdateTime(new Date());
         if (roleService.save(role)) {
             return Result.ok().message("添加角色成功");
         }
@@ -75,6 +81,22 @@ public class RoleController {
                 permissionService.findPermissionTree(roleId);
 //返回数据
         return Result.ok(permissionTree);
+    }
+
+    /**
+     * 分配权限-保存权限数据
+     *
+     * @param rolePermissionDTO
+     * @return
+     */
+    @PostMapping("/saveRoleAssign")
+    public Result saveRoleAssign(@RequestBody RolePermissionDTO rolePermissionDTO) {
+        if (roleService.saveRolePermission(rolePermissionDTO.getRoleId(),
+                rolePermissionDTO.getList())) {
+            return Result.ok().message("权限分配成功");
+        } else {
+            return Result.error().message("权限分配失败");
+        }
     }
 
 

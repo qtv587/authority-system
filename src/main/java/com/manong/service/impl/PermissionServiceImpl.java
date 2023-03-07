@@ -96,15 +96,16 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
         if (user != null && !ObjectUtils.isEmpty(user.getIsAdmin()) && user.getIsAdmin() == 1) {
             list = baseMapper.selectList(null);
         } else {
-            list = baseMapper.findPermissionListByUserId(roleId);
+            list = baseMapper.findPermissionListByUserId(user.getId());
         }
         List<Permission> permissionList = MenuTree.makeMenuTree(list, 0L);
-        ArrayList<Long> listIds = new ArrayList<>();
+        List<Permission> rolePermissions = baseMapper.findPermissionListByRoleId(roleId);
+        List<Long> listIds = new ArrayList<>();
         Optional.ofNullable(list).orElse(new ArrayList<>())
                 .stream()
                 .filter(Objects::nonNull)
                 .forEach(item -> {
-                    Optional.ofNullable(permissionList).orElse(new ArrayList<>())
+                    Optional.ofNullable(rolePermissions).orElse(new ArrayList<>())
                             .stream()
                             .filter(Objects::nonNull)
                             .forEach(obj -> {
