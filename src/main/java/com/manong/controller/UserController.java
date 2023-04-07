@@ -13,6 +13,7 @@ import com.manong.vo.query.RoleQueryVo;
 import com.manong.vo.query.UserQueryVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -42,7 +43,7 @@ public class UserController {
 
     @RequestMapping("/listAll")
     @ApiOperation(value = "查询所有用户的接口",
-            notes = "<span style='color:red;'>描述:</span>&nbsp;用来查询所有用户信息的接口")
+            notes = "<span style='color:red;'>描述:</span>&nbsp;用来查询所有用户信息的接口")  //Swagger 配置
     public Result listAll() {
         return Result.ok(userService.list());
     }
@@ -65,6 +66,8 @@ public class UserController {
      * @return
      */
     @PostMapping("/add")
+    //TODO 后端单独权限控制
+    @PreAuthorize("hasAuthority('sys:user:add')")
     public Result add(@RequestBody User user) {
 //查询用户
         User item = userService.findUserByUserName(user.getUsername());
@@ -88,6 +91,7 @@ public class UserController {
      * @return
      */
     @PutMapping("/update")
+
     public Result update(@RequestBody User user) {
 //查询用户
         User item = userService.findUserByUserName(user.getUsername());
@@ -109,6 +113,7 @@ public class UserController {
      * @return
      */
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAuthority('sys:user:delete')")
     public Result delete(@PathVariable Long id) {
 //调用删除用户信息的方法
         if (userService.deleteById(id)) {

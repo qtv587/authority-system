@@ -10,7 +10,6 @@ import com.manong.utils.Result;
 import com.manong.vo.RouterVo;
 import com.manong.vo.TokenVo;
 import io.jsonwebtoken.Jwts;
-import javafx.geometry.Pos;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -46,6 +45,7 @@ public class SysUserController {
     public Result refreshToken(HttpServletRequest request) {
         //获取token信息
         String token = request.getHeader("token");
+        System.out.println(token);
         if (ObjectUtils.isEmpty(token)) {
             token = request.getParameter("token");
         }

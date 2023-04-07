@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.manong.dao.HeroInfoMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.manong.entity.HeroInfo">
+        <id column="uid" property="uid" />
+        <result column="name" property="name" />
+        <result column="alias" property="alias" />
+        <result column="platform" property="platform" />
+        <result column="photo" property="photo" />
+        <result column="area" property="area" />
+        <result column="area_power" property="areaPower" />
+        <result column="city" property="city" />
+        <result column="city_power" property="cityPower" />
+        <result column="province" property="province" />
+        <result column="province_power" property="provincePower" />
+        <result column="guobiao" property="guobiao" />
+        <result column="updatetime" property="updatetime" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        uid, name, alias, platform, photo, area, area_power, city, city_power, province, province_power, guobiao, updatetime
+    </sql>
+
+</mapper>

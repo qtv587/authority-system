@@ -29,12 +29,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final String URL_WHITELIST[] = {
             "/api/user/login",
-            "/swagger-ui.html",
-            "/webjars/springfox-swagger-ui/**",
-            "/v2/api-docs/**",
-            "/swagger-resources/**",
-            "/swagger-ui.html",
-            "/api/user/swagger"
+//            "/swagger-ui.html",
+//            "/webjars/springfox-swagger-ui/**",
+//            "/v2/api-docs/**",
+//            "/swagger-resources/**",
+//            "/swagger-ui.html",
+//            "/api/user/swagger"
     };
     @Resource
     private LoginFailureHandler loginFailureHandler;
